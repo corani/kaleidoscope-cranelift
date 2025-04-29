@@ -1,6 +1,8 @@
 use self::Error::*;
+
 use cranelift::codegen::CodegenError;
 use cranelift_module::ModuleError;
+
 use std::fmt::{self, Debug, Formatter};
 use std::io;
 use std::num::ParseFloatError;

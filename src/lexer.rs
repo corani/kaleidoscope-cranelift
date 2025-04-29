@@ -1,5 +1,6 @@
 use crate::error::Error::UnknownChar;
 use crate::error::Result;
+
 use std::io::{Bytes, Read};
 use std::iter::Peekable;
 

@@ -5,10 +5,12 @@ mod lexer;
 mod parser;
 
 use cranelift_module::Linkage;
+
 use error::Result;
 use generator::Generator;
 use lexer::{Lexer, Token};
 use parser::Parser;
+
 use std::io::{Write, stdin, stdout};
 
 fn main() -> Result<()> {

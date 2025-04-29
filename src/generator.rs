@@ -1,17 +1,16 @@
-use crate::ast::{BinaryOp, Expr};
-use crate::ast::{Function, Prototype};
+use crate::ast::{BinaryOp, Expr, Function, Prototype};
 use crate::error::Error::*;
 use crate::error::Result;
+
 use cranelift::codegen::ir::InstBuilder;
 use cranelift::codegen::settings::Configurable;
-use cranelift::prelude::FloatCC;
-use cranelift::prelude::{AbiParam, FunctionBuilderContext};
-use cranelift::prelude::{EntityRef, FunctionBuilder, Value, Variable, types};
-use cranelift::prelude::{isa, settings};
+use cranelift::prelude::{
+    AbiParam, EntityRef, FloatCC, FunctionBuilder, FunctionBuilderContext, Value, Variable, isa,
+    settings, types,
+};
 use cranelift_jit::{JITBuilder, JITModule};
-use cranelift_module::FuncId;
-use cranelift_module::Linkage;
-use cranelift_module::Module;
+use cranelift_module::{FuncId, Linkage, Module};
+
 use std::collections::HashMap;
 use std::mem;
 use target_lexicon::triple;
@@ -142,7 +141,11 @@ impl Generator {
             self.functions.remove(&function_name);
         }
 
-        unsafe { Ok(mem::transmute(self.module.get_finalized_function(func_id))) }
+        unsafe {
+            Ok(mem::transmute::<*const u8, fn() -> f64>(
+                self.module.get_finalized_function(func_id),
+            ))
+        }
     }
 }
 
@@ -179,7 +182,7 @@ pub struct FunctionGenerator<'a> {
     values: HashMap<String, Variable>,
 }
 
-impl<'a> FunctionGenerator<'a> {
+impl FunctionGenerator<'_> {
     fn expr(&mut self, expr: Expr) -> Result<Value> {
         let value = match expr {
             Expr::Number(num) => self.builder.ins().f64const(num),

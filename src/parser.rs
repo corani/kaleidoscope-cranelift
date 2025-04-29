@@ -2,6 +2,7 @@ use crate::ast::{BinaryOp, Expr, Function, Prototype};
 use crate::error::Error::{Undefined, Unexpected};
 use crate::error::Result;
 use crate::lexer::{Lexer, Token};
+
 use std::collections::HashMap;
 use std::io::Read;
 
@@ -63,18 +64,13 @@ impl<R: Read> Parser<R> {
     fn parameters(&mut self) -> Result<Vec<String>> {
         let mut params = vec![];
 
-        loop {
-            match *self.lexer.peek()? {
-                Token::Identifier(_) => {
-                    let ident = match self.lexer.next_token()? {
-                        Token::Identifier(ident) => ident,
-                        _ => unreachable!(),
-                    };
+        while let Token::Identifier(_) = *self.lexer.peek()? {
+            let ident = match self.lexer.next_token()? {
+                Token::Identifier(ident) => ident,
+                _ => unreachable!(),
+            };
 
-                    params.push(ident);
-                }
-                _ => break,
-            }
+            params.push(ident);
         }
 
         Ok(params)
