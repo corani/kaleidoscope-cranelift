@@ -1,0 +1,11 @@
+[package]
+name = "kaleidoscope-cranelift"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cranelift = "0.119"
+cranelift-module = "0.119"
+cranelift-jit = "0.119"
+cranelift-control = "0.119"
+target-lexicon = "0.13.2"
